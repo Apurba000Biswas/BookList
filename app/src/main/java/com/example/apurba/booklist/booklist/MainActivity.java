@@ -22,11 +22,12 @@ public class MainActivity extends AppCompatActivity {
         final EditText editText = findViewById(R.id.plain_text_input);
         final TextView textView  = findViewById(R.id.textfield);
 
-        final List<BookInfo> books =  new ArrayList<BookInfo>();
-        books.add(new BookInfo("Harry potter and the philosopher stone","J.K.R"));
+        final List<BookInfo> books =  QueryUtils.extractFeatureFromJson();
+       /* books.add(new BookInfo("Harry potter and the philosopher stone","J.K.R"));
         books.add(new BookInfo("Harry potter and the prisoner of ajkaban","J.K.R"));
         books.add(new BookInfo("Harry potter and the chambar of secrets","J.K.R"));
         books.add(new BookInfo("Harry potter and the order of phonix","J.K.R"));
+        */
 
         ListView booksListView = (ListView) findViewById(R.id.list);
         booksAdapater mAdapter = new booksAdapater(this, books);
