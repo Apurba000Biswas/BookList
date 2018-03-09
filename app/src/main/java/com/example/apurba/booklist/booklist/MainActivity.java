@@ -1,7 +1,6 @@
 package com.example.apurba.booklist.booklist;
 
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,9 +12,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<BookInfo>>{
+public class MainActivity extends AppCompatActivity {
 
-    private static final String GOOGLE_BOOK_REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?q=flowers+inauthor:keyes&AIzaSyA3Y-kastM6XNrI6YGZ8F6_X6ikpXE2Au4";
+    private String googleBookRequestUrl = "https://www.googleapis.com/books/v1/volumes?q=";
     private booksAdapater mAdapter;
 
     @Override
@@ -26,14 +25,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         final EditText editText = findViewById(R.id.plain_text_input);
         final TextView textView  = findViewById(R.id.textfield);
 
-        final List<BookInfo> books =  new ArrayList<BookInfo>();
-
-
+        List<BookInfo> books =  new ArrayList<BookInfo>();
         ListView booksListView = (ListView) findViewById(R.id.list);
         mAdapter = new booksAdapater(this, books);
         booksListView.setAdapter(mAdapter);
 
-        final LoaderManager loaderManager = getSupportLoaderManager();
+
 
         Button button = findViewById(R.id.button_id);
         button.setOnClickListener(new View.OnClickListener() {
@@ -41,30 +38,39 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 String givenText = editText.getText().toString();
                 textView.setText(givenText);
 
-                loaderManager.initLoader(0, null, MainActivity.this).forceLoad();
+                bookLoadingAsyncTask task = new bookLoadingAsyncTask();
+                updateRequestUrl(givenText, textView);
+                task.execute(googleBookRequestUrl);
             }
         });
     }
 
-    @Override
-    public Loader<List<BookInfo>> onCreateLoader(int i, Bundle bundle) {
-        return new BooksLoader(this, GOOGLE_BOOK_REQUEST_URL);
+    private void updateRequestUrl(String input, TextView textView){
+
+        googleBookRequestUrl =googleBookRequestUrl + input + "&maxResults=20";
+        textView.setText(googleBookRequestUrl);
     }
 
-    @Override
-    public void onLoadFinished(Loader<List<BookInfo>> loader, List<BookInfo> books) {
+    private class bookLoadingAsyncTask extends AsyncTask<String, Void, List<BookInfo>> {
+        @Override
+        protected List<BookInfo> doInBackground(String... urls) {
+            if (urls.length < 1 || urls[0] == null) {
+                return null;
+            }
 
-        mAdapter.clear();
+            List<BookInfo> result = QueryUtils.fetchBooksData(urls[0]);
+            return result;
+        }
 
-        // If there is a valid list of {@link book}s, then add them to the adapter's
-        // data set. This will trigger the ListView to update.
-        if (books != null && !books.isEmpty()) {
-            mAdapter.addAll(books);
+        @Override
+        protected void onPostExecute(List<BookInfo> bookInfos) {
+            mAdapter.clear();
+
+            if (bookInfos != null && !bookInfos.isEmpty()) {
+                mAdapter.addAll(bookInfos);
+            }
+            googleBookRequestUrl = "https://www.googleapis.com/books/v1/volumes?q=";
         }
     }
 
-    @Override
-    public void onLoaderReset(Loader<List<BookInfo>> loader) {
-        mAdapter.clear();
-    }
 }
