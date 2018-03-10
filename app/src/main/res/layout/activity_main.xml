@@ -1,37 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_height="match_parent">
 
-
-    <EditText
-        android:id="@+id/plain_text_input"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text" />
-    <Button
-        android:id="@+id/button_id"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:onClick="buttonClicked"
-        android:text="done" />
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/plain_text_input"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+        <Button
+            android:id="@+id/button_id"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="search" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/textfield"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Check"/>
 
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/list"
-        android:orientation="vertical"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"
-        android:background="#FFFFFF"
-        android:dividerHeight="0dp"/>
+        android:layout_height="match_parent">
+
+        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/list"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:background="#FFFFFF"
+            android:dividerHeight="0dp"/>
+
+        <!-- Empty view is only visible when the list has no items. -->
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textAppearance="?android:textAppearanceMedium"/>
+
+        <ProgressBar
+            android:id="@+id/loading_spinner"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 
 </LinearLayout>
 

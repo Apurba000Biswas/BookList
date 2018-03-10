@@ -33,6 +33,9 @@ public class booksAdapater extends ArrayAdapter<BookInfo>{
         return listBooksInfoView;
     }
 
+    /**
+     * sets all views in the current row of the list view
+     */
     private void setAllViews(BookInfo currentBook, View listBooksInfoView){
         TextView tittleTextView = listBooksInfoView.findViewById(R.id.tittle);
         tittleTextView.setText(currentBook.getTittle());

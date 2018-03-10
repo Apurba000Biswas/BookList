@@ -24,12 +24,15 @@ import java.util.List;
 
 public class QueryUtils {
 
-
     public static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
+    //private constructor
     private QueryUtils(){
     }
 
+    /*Method: fetchBooksData
+     * takes url and produce list of books and return it
+     */
     public static List<BookInfo> fetchBooksData(String requestUrl) {
 
         URL url = createUrl(requestUrl);
@@ -110,6 +113,8 @@ public class QueryUtils {
         return output.toString();
     }
 
+    /** Extract the book info data from the jason response
+     */
     private static List<BookInfo> extractFeatureFromJson(String JSonResponse) {
         if (TextUtils.isEmpty(JSonResponse)) {
             return null;
